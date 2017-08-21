@@ -8,8 +8,8 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
-        let rows = 3;
-        let columns = 5;
+        let rows = 30;
+        let columns = 50;
 
         let board = Array(rows).fill().map(() => Array(columns).fill(0))
 
@@ -30,10 +30,11 @@ class App extends React.Component {
         this.close = this.close.bind(this);
         this.save = this.save.bind(this);
         this.change = this.change.bind(this);
+        this.clear = this.clear.bind(this);
     }
 
     componentDidMount() {
-        setInterval(this.timer, this.state.msSpeed);
+        // setInterval(this.timer, this.state.msSpeed);
     }
 
     click(x, y) {
@@ -44,16 +45,25 @@ class App extends React.Component {
             board: board
         });
     }
+    clear() {
+        let board = Array(this.state.rows).fill().map(() => Array(this.state.columns).fill(0));
+
+        this.setState({
+            board: board
+        });
+    }
 
     run(){
         this.setState({
-            run: true
+            run: true,
+            interval: setInterval(this.timer, this.state.msSpeed),
         });
     }
 
     stop() {
         this.setState({
-            run: false
+            run: false,
+            interval: clearInterval(this.state.interval)
         });
     }
 
@@ -164,16 +174,10 @@ class App extends React.Component {
                 <div className="buttons">
                     <button onClick={() => this.run()}>Run</button>
                     <button onClick={() => this.stop()}>Stop</button>
+                    <button onClick={() => this.clear()}>Clear</button>
                     <button onClick={() => this.open()}>Change Settings</button>
                 </div>
                 <div>
-                    <Button
-                        bsStyle="primary"
-                        bsSize="large"
-                        onClick={() => this.open()}
-                    >
-                        Launch demo modal
-                    </Button>
 
                     <Modal show={this.state.showModal} onHide={this.close}>
                         <Modal.Header>
