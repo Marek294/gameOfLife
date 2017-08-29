@@ -8,9 +8,14 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
+var server = _http2.default.Server(app);
 
 var webpack = void 0;
 var webpackMiddleware = void 0;
@@ -33,13 +38,15 @@ if (process.env.NODE_ENV.trim() === 'development') {
     }));
 }
 
+app.use(_express2.default.static('public'));
+
 app.get('/*', function (req, res) {
-    res.sendFile(_path2.default.join(__dirname, '../client/index.html'));
+    res.sendFile(_path2.default.join(__dirname, '../public/index.html'));
 });
 
 app.set('port', process.env.PORT || 3000);
 
-app.listen(app.get('port'), function () {
+server.listen(app.get('port'), function () {
     return console.log('Running on localhost:' + app.get('port'));
 });
 //# sourceMappingURL=index.js.map

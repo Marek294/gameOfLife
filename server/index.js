@@ -1,7 +1,9 @@
 import express from 'express';
 import path from 'path';
+import http from 'http';
 
 let app = express();
+let server = http.Server(app);
 
 let webpack;
 let webpackMiddleware;
@@ -24,10 +26,12 @@ if(process.env.NODE_ENV.trim() === 'development') {
     }));
 }
 
+app.use(express.static('public'));
+
 app.get('/*', (req,res) => {
-    res.sendFile(path.join(__dirname, '../client/index.html'));
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.set('port', (process.env.PORT || 3000));
 
-app.listen(app.get('port'), () => console.log(`Running on localhost:${app.get('port')}`));
+server.listen(app.get('port'), () => console.log(`Running on localhost:${app.get('port')}`));

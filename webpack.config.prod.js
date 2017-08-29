@@ -3,10 +3,10 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: [
-        path.join(__dirname, '/client/index.js')
+        path.join(__dirname, './client/index.js')
     ],
     output: {
-        path: path.join(__dirname, '/client'),
+        path: path.join(__dirname, '/public'),
         filename: 'bundle.js',
         publicPath: '/'
     },
