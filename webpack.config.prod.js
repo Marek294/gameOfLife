@@ -1,13 +1,12 @@
-import path from 'path';
-import webpack from 'webpack';
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     entry: [
-        'webpack-hot-middleware/client',
         path.join(__dirname, '/client/index.js')
     ],
     output: {
-        path: '/',
+        path: path.join(__dirname, '/client'),
         filename: 'bundle.js',
         publicPath: '/'
     },

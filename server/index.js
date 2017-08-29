@@ -1,26 +1,33 @@
 import express from 'express';
 import path from 'path';
 
-import webpack from 'webpack';
-import webpackMiddleware from 'webpack-dev-middleware';
-import webpackConfig from '../webpack.config.dev';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-
 let app = express();
 
-const compiler = webpack(webpackConfig);
+let webpack;
+let webpackMiddleware;
+let webpackHotMiddleware;
+let webpackConfig;
 
-app.use(webpackMiddleware(compiler, {
-    hot: true,
-    publicPath: webpackConfig.output.publicPath,
-    noInfo: true
-}));
-app.use(webpackHotMiddleware(compiler));
+if(process.env.NODE_ENV.trim() === 'development') {
+    webpack = require('webpack');
+    webpackMiddleware = require('webpack-dev-middleware');
+    webpackHotMiddleware = require('webpack-hot-middleware');
+
+    webpackConfig = require('../webpack.config.dev');
+    const compiler = webpack(webpackConfig);
+
+    app.use(webpackMiddleware(compiler));
+    app.use(webpackHotMiddleware(compiler, {
+        hot: true,
+        publicPath: webpackConfig.output.publicPath,
+        noInfo: true
+    }));
+}
 
 app.get('/*', (req,res) => {
     res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
-const port = process.env.port || 3000;
+app.set('port', (process.env.PORT || 3000));
 
-app.listen(port, () => console.log(`Running on localhost:${port}`));
+app.listen(app.get('port'), () => console.log(`Running on localhost:${app.get('port')}`));
